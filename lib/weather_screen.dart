@@ -17,7 +17,7 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   Future<Map<String, dynamic>> getCurrentWeather() async {
     try {
-      const String location = 'Chittagong';
+      const String location = 'Dhaka';
       const String apiKey = '073e067ecb7de3ac02d3614cca930816';
 
       final res = await http.get(
