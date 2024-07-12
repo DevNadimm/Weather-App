@@ -130,17 +130,17 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     AdditionalInfoContainer(
                       icon: Icons.water_drop_rounded,
                       label: 'Humidity',
-                      num: humidity,
+                      num: '$humidity%',
                     ),
                     AdditionalInfoContainer(
                       icon: Icons.air,
                       label: 'Wind Speed',
-                      num: windSpeed,
+                      num: '$windSpeed km/h',
                     ),
                     AdditionalInfoContainer(
                       icon: Icons.waves,
                       label: 'Pressure',
-                      num: pressure,
+                      num: '$pressure mb',
                     ),
                   ],
                 ),
