@@ -16,7 +16,7 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreenState extends State<WeatherScreen> {
   final WeatherApiService _apiService = WeatherApiService();
-  String _location = 'Chittagong';
+  String _location = 'Dhaka';
 
   void _updateLocation(String newLocation) {
     setState(() {
