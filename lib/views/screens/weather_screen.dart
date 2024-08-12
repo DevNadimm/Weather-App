@@ -16,6 +16,10 @@ class WeatherScreen extends StatefulWidget {
 class _WeatherScreenState extends State<WeatherScreen> {
   final WeatherApiService _apiService = WeatherApiService();
 
+  Future<void> _refreshWeatherData() async {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,17 +29,9 @@ class _WeatherScreenState extends State<WeatherScreen> {
           style: TextStyle(fontSize: 23, fontWeight: FontWeight.w500),
         ),
         centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              setState(() {});
-            },
-            icon: const Icon(Icons.refresh),
-          )
-        ],
       ),
       body: FutureBuilder(
-        future: _apiService.getCurrentWeather(), // Use the API service here
+        future: _apiService.getCurrentWeather(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator.adaptive());
@@ -43,6 +39,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
           if (snapshot.hasError) {
             return Center(child: Text(snapshot.error.toString()));
+          }
+
+          if (!snapshot.hasData || snapshot.data == null) {
+            return const Center(child: Text('No data available.'));
           }
 
           final data = snapshot.data!;
@@ -54,10 +54,12 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
           final weatherIcon = getWeatherIcon(currentSky);
 
-          return Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          return RefreshIndicator(
+            onRefresh: _refreshWeatherData,
+            backgroundColor: Colors.blueGrey,
+            color: Colors.white,
+            child: ListView(
+              padding: const EdgeInsets.all(16),
               children: [
                 MainContainer(
                   icon: weatherIcon,
