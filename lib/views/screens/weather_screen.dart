@@ -1,11 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:weather_app/widgets/additional_info_container.dart';
-import 'package:weather_app/widgets/get_current_icon.dart';
-import 'package:weather_app/widgets/main_container.dart';
-import 'package:weather_app/widgets/weather_forecast_container.dart';
-import 'package:http/http.dart' as http;
+import '../../controller/weather_api_service.dart';
+import '../../models/get_weather_icon.dart';
+import '../widgets/additional_info_container.dart';
+import '../widgets/main_container.dart';
+import '../widgets/weather_forecast_container.dart';
 
 class WeatherScreen extends StatefulWidget {
   const WeatherScreen({super.key});
@@ -15,26 +14,7 @@ class WeatherScreen extends StatefulWidget {
 }
 
 class _WeatherScreenState extends State<WeatherScreen> {
-  Future<Map<String, dynamic>> getCurrentWeather() async {
-    try {
-      const String location = 'Dhaka';
-      const String apiKey = '073e067ecb7de3ac02d3614cca930816';
-
-      final res = await http.get(
-        Uri.parse(
-            'https://api.openweathermap.org/data/2.5/forecast?q=$location&APPID=$apiKey'),
-      );
-      final data = jsonDecode(res.body);
-
-      if (res.statusCode != 200) {
-        throw Exception('HTTP request failed with status: ${res.statusCode}');
-      }
-
-      return data;
-    } catch (error) {
-      throw error.toString();
-    }
-  }
+  final WeatherApiService _apiService = WeatherApiService();
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +35,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
         ],
       ),
       body: FutureBuilder(
-        future: getCurrentWeather(),
+        future: _apiService.getCurrentWeather(), // Use the API service here
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator.adaptive());
@@ -72,13 +52,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
           var pressure = data['list'][1]['main']['pressure'].toString();
           var windSpeed = data['list'][1]['wind']['speed'].toString();
 
+          final weatherIcon = getWeatherIcon(currentSky);
+
           return Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 MainContainer(
-                  icon: getWeatherIcon(currentSky),
+                  icon: weatherIcon,
                   label: currentSky,
                   temp: '${currentTemp.toStringAsFixed(2)}° C',
                 ),

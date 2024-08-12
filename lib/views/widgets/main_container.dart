@@ -22,7 +22,7 @@ class MainContainer extends StatelessWidget {
         children: [
           Text(
             temp,
-            style: const TextStyle(fontSize: 27,fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 27, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 10),
           Icon(
@@ -32,7 +32,7 @@ class MainContainer extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             label,
-            style: const TextStyle(fontSize: 18,fontWeight: FontWeight.w400),
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
           ),
         ],
       ),
